@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">GestionEnvios</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="aceptar">Aceptar</string>
+</resources>
