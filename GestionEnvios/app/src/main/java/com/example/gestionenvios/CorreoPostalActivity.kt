@@ -199,6 +199,7 @@ class CorreoPostalActivity : AppCompatActivity() {
         val intent = Intent(this, RecepcionActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(RecepcionActivity.MENSAJE_RECEPCION, tvOpcionSeleccionada.text.toString().split(": ").last())
+            putExtra(RecepcionActivity.ASEGURADO, true)
         }
 
         val pendingIntent = PendingIntent.getActivity(
