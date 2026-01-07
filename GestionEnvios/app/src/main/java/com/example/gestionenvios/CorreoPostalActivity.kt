@@ -198,8 +198,10 @@ class CorreoPostalActivity : AppCompatActivity() {
         // Este Intent dice "Quiero abrir DetailActivity"
         val intent = Intent(this, RecepcionActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(RecepcionActivity.MENSAJE_RECEPCION, tvOpcionSeleccionada.text.toString().split(": ").last())
+//            putExtra(RecepcionActivity.MENSAJE_RECEPCION, tvOpcionSeleccionada.text.toString().split(": ").last())
+            putExtra(RecepcionActivity.MENSAJE_RECEPCION, RecepcionActivity.CERTIFICADO)
             putExtra(RecepcionActivity.ASEGURADO, true)
+            putExtra(RecepcionActivity.CERTIFICADO, tvOpcionSeleccionada.text.toString().split(": ").last())
         }
 
         val pendingIntent = PendingIntent.getActivity(

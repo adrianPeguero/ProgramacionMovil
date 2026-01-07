@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#BF984E"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/ivBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/bck_hp">
+
+    </ImageView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@drawable/m3_split_button_chevron_avd"
+        android:orientation="vertical"
+        android:paddingLeft="40dp"
+        android:paddingTop="80dp"
+        android:paddingRight="40dp"
+        android:showDividers="middle">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/yesteryear"
+            android:gravity="center"
+            android:text="Welcome, Young Witch/Wizard"
+            android:textColor="#F2EDDC"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Oillvalnders' Wand Managment System"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnGestion"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="150dp"
+            android:alpha="0.85"
+            android:background="@drawable/boton_personalizado"
+            android:backgroundTint="@null"
+            android:onClick="onGestionClicked"
+            android:text="GESTION DE VARITAS"
+            android:textSize="20sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCreacion"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_gravity="center"
+            android:alpha="0.85"
+            android:background="@drawable/boton_personalizado"
+            android:backgroundTint="#466C8C"
+            android:onClick="onCreacionClicked"
+            android:text="CREACION DE VARITA"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

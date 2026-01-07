@@ -20,9 +20,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        // Carga el archivo XML que creaste
         menuInflater.inflate(R.menu.menu, menu)
-        return true // Devuelve true para que el menú se muestre
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

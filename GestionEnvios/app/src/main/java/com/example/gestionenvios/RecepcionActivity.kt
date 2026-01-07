@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModel
 import com.example.gestionenvios.databinding.ActivityRecepcionBinding
 
 class RecepcionActivity : AppCompatActivity() {
@@ -17,7 +16,7 @@ class RecepcionActivity : AppCompatActivity() {
         val MENSAJE_RECEPCION = "mensaje_recepcion"
         val ASEGURADO = "paquete_asegurado"
         val ORIGEN_MENU = "1"
-        var ORIGEN_NOTIFICACION = "2"
+        val CERTIFICADO = "certificado"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,12 +47,20 @@ class RecepcionActivity : AppCompatActivity() {
         val intent = intent
         val origen = intent.getStringExtra(MENSAJE_RECEPCION)
         if(origen == ORIGEN_MENU) mensajeDesdeMenu()
-        else mensajeDesdeNotificacion(origen)
+        else if(origen == CERTIFICADO){
+            val tamanyo = intent.getStringExtra(CERTIFICADO)
+            mensajeCertificado(tamanyo.toString())
+        }
+        else mensajeEnvioPaquete(origen)
 
     }
 
-    private fun mensajeDesdeNotificacion(origen: String?) {
-        binding.tvMensaje.text = "Se ha recibido un paquete certificado de tamano $origen"
+    private fun mensajeCertificado(tamanyo:String) {
+        binding.tvMensaje.text = "Se ha recibido un certificado de tamanyo $tamanyo"
+    }
+
+    private fun mensajeEnvioPaquete(origen: String?) {
+        binding.tvMensaje.text = "Se ha recibido un paquete de tamano $origen"
     }
 
     private fun mensajeDesdeMenu() {

@@ -4,30 +4,28 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.gestionenvios.databinding.ActivityEnvioPaquetesBinding
-import com.example.gestionenvios.databinding.ActivityMainBinding
 
 class EnvioPaquetesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEnvioPaquetesBinding
+    private val pesoMaximo = 500
+    private var dimensonesCorrectas = false
+    private var pesoCorrecto = false
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -57,15 +55,39 @@ class EnvioPaquetesActivity : AppCompatActivity() {
 
     private fun valoresValidos(): Boolean {
         val peso = binding.editPeso.text.toString().toIntOrNull()
+        val dimensiones = binding.editDimensiones.text.toString()
+        pesoCorrecto = comprobarPeso(peso)
+        dimensonesCorrectas = comprobarDimensiones(dimensiones)
 
-        // 1. Comprobación de que es un número válido.
-        if (peso == null) {
-            // Si es null, no es un número válido.
-            return false
+       return pesoCorrecto && dimensonesCorrectas
+
+    }
+
+    private fun comprobarDimensiones(dimensiones: String): Boolean {
+        var valores = dimensiones.split("x")
+        if (valores.size == 3){
+            val ancho = valores[0]
+            val largo = valores[1]
+            val alto = valores[2]
+
+            dimensonesCorrectas = dimensionesValidas(Integer.parseInt(ancho),
+                Integer.parseInt(largo),
+                Integer.parseInt(alto))
         }
+        return dimensonesCorrectas
+    }
 
-        // 2. Comprobación del rango.
-        return peso < 500
+    private fun dimensionesValidas(ancho: Int, largo: Int, alto: Int): Boolean {
+        return (ancho >= 10 && ancho <= 200) &&
+                (largo >= 5 && largo <= 150) &&
+                (alto >= 10 && alto <= 300)
+    }
+
+    private fun comprobarPeso(peso: Int?): Boolean {
+        if (peso != null) {
+            return peso < 500
+        }
+        return false
     }
 
     fun onEnviarClick(view: View){
@@ -92,7 +114,10 @@ class EnvioPaquetesActivity : AppCompatActivity() {
     }
 
     private fun mostrarDialogosValores() {
-        val mensaje = "El peso del paquete no puede superar los 500KG."
+        var mensaje = ""
+        if(!dimensonesCorrectas) mensaje += "Las dimensiones mínimas son de 10x5x10 y las máximas son 200x150x300\n."
+        if(!pesoCorrecto) mensaje += "El peso debe ser menor de $pesoMaximo KG"
+
         AlertDialog.Builder(this).
                 setTitle("Valores erroenos").
                 setMessage(mensaje).
@@ -112,6 +137,7 @@ class EnvioPaquetesActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }).show()
     }
+
     private fun camposNulos(): List<String>{
         var camposVacios = mutableListOf<String>()
 
