@@ -11,6 +11,7 @@ import com.example.harrypotterapi.data.Varita
 
 class VaritaAdapter(context: Context, private val resource: Int, objects: List<Varita>):
     ArrayAdapter<Varita>(context, resource, objects){
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val layoutInflater = LayoutInflater.from(context)
         val view: View = convertView ?: layoutInflater.inflate(R.layout.item_mago, parent, false)
@@ -18,9 +19,10 @@ class VaritaAdapter(context: Context, private val resource: Int, objects: List<V
         val varita = getItem(position)
 
         val maderaNucleo = view.findViewById<TextView>(R.id.tvMaderaNucleo)
-        val madera = varita?.madera
-        val nucleo = varita?.nucleo
-        maderaNucleo.text = formatearCampo(madera, nucleo)
+        val madera = varita?.materiales?.split(". ")?.first()
+        val nucleo = varita?.materiales?.split(". ")?.last()
+        val materiales = formatearCampo(madera, nucleo)
+        maderaNucleo.text = materiales
         
         val mago = view.findViewById<TextView>(R.id.tvMago)
         val nombreMago = varita?.mago

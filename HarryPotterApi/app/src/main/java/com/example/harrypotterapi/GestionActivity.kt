@@ -70,6 +70,9 @@ class GestionActivity : AppCompatActivity() {
                 Log.e("API_ERROR", "Codigo de error ${respuesta.code()}")
                 if(respuesta.isSuccessful){
                     val datos = respuesta.body()?.toMutableList() ?: mutableListOf()
+                    datos?.forEach {
+                        Log.d("DEBUG_API", "Varita: ${it.mago}, ID real: ${it.id} ${it.rota} ${it.materiales}")
+                    }
                     withContext(Dispatchers.Main){
                         val adapter = VaritaAdapter(this@GestionActivity,R.layout.item_mago , datos)
                         binding.lvVaritas.adapter = adapter

@@ -8,9 +8,9 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    @GET("api/varita")
+    @GET("api/varita/resumen")
     suspend fun getVaritas(): Response<List<Varita>>
 
     @PUT("api/varita/romper/{id}")
-    suspend fun romperVarita(@Path("id") idVarita: Long): Response<Varita>
+    suspend fun romperVarita(@Path("id") idVarita: Int): Response<Varita>
 }

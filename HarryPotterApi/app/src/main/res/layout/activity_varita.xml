@@ -156,6 +156,7 @@
             android:background="@drawable/boton_custom_varita"
             android:backgroundTint="#9E1414"
             android:gravity="center"
+            android:onClick="onClickRomper"
             android:text="ROMPER VARITA"
             android:textColor="@color/white"
             android:textSize="20dp" />
