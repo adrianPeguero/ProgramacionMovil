@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.harrypotterapi.adapter.VaritaAdapter
 import com.example.harrypotterapi.data.ApiService
+import com.example.harrypotterapi.data.CrearVarita
 import com.example.harrypotterapi.data.Varita
 import com.example.harrypotterapi.databinding.ActivityVaritaBinding
 import com.google.gson.Gson
@@ -45,7 +46,7 @@ class VaritaActivity : AppCompatActivity() {
         binding.tvMago.setText(varitaSeleccionada?.mago)
         binding.tvNucleo.setText(varitaSeleccionada?.materiales?.split(". ")?.last())
         binding.tvLongitud.setText(varitaSeleccionada?.longitud.toString())
-        if(varitaSeleccionada?.rota.equals("true")) binding.cbRota.isChecked = true
+        if(varitaSeleccionada?.rota.equals("Si")) binding.cbRota.isChecked = true
     }
 
     fun recogerVarita(){
@@ -92,6 +93,59 @@ class VaritaActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    fun onClickCrear(view:View){
+        var campos = getCampos()
+        if(HayCamposNulos(campos)){
+            //mensaje
+            return
+        }
+        val madera = binding.tvMadera.text.toString()
+        val nucelo = binding.tvNucleo.text.toString()
+        val longitud = binding.tvLongitud.text.toString().toDouble()
+        val mago = binding.tvMago.text.toString()
+        val rota = binding.cbRota.isChecked
+
+        var varita = CrearVarita(madera, nucelo, longitud, rota, mago)
+        val servicio = getRetrofit()
+        lifecycleScope.launch(Dispatchers.IO){
+            try{
+                val respuesta = servicio.crearVarita(varita)
+                if(respuesta.isSuccessful){
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(this@VaritaActivity, "Varita creada correctmente", Toast.LENGTH_SHORT).show()
+                        binding.tvMadera.setText("")
+                        binding.tvNucleo.setText("")
+                        binding.tvLongitud.setText("")
+                        binding.tvMago.setText("")
+                        if(binding.cbRota.isChecked) binding.cbRota.isChecked = false
+                    }
+                }
+            }catch (e : Exception){
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@VaritaActivity, "Varita actualizada.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+    private fun HayCamposNulos(campos: List<String>): Boolean {
+        var nulo = false
+        for(c in campos){
+            if(c.isEmpty()) nulo = true
+        }
+
+        return nulo
+    }
+    private fun getCampos(): List<String> {
+        return listOf(
+            binding.tvMadera.text.toString(),
+            binding.tvNucleo.text.toString(),
+            binding.tvLongitud.toString(),
+            binding.tvMago.toString()
+        )
     }
 
     private fun mostrarMenuNavegacion(view: View) {

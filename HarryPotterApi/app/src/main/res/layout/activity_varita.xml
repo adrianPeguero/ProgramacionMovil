@@ -178,9 +178,10 @@
             android:background="@drawable/boton_custom_varita"
             android:backgroundTint="#1A6D1A"
             android:gravity="center"
+            android:onClick="onClickCrear"
             android:text="CREAR VARITA"
             android:textColor="@color/white"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
     </LinearLayout>
 
