@@ -35,7 +35,7 @@ class GestionActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.tbBack)
-        supportActionBar?.setDisplayShowTitleEnabled(false) //Quita el titulo predeterminado (HarryPotterApi)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         inicializarLista()
@@ -70,9 +70,6 @@ class GestionActivity : AppCompatActivity() {
                 Log.e("API_ERROR", "Codigo de error ${respuesta.code()}")
                 if(respuesta.isSuccessful){
                     val datos = respuesta.body()?.toMutableList() ?: mutableListOf()
-                    datos?.forEach {
-                        Log.d("DEBUG_API", "Varita: ${it.mago}, ID real: ${it.id} ${it.rota} ${it.materiales}")
-                    }
                     withContext(Dispatchers.Main){
                         val adapter = VaritaAdapter(this@GestionActivity,R.layout.item_mago , datos)
                         binding.lvVaritas.adapter = adapter
@@ -83,6 +80,9 @@ class GestionActivity : AppCompatActivity() {
                 }
             }
             catch (e: Exception){
+                withContext(Dispatchers.Main){
+                    Toast.makeText(this@GestionActivity, "Error al mostrar varitas.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ package com.example.harrypotterapi.data
 
 
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -16,6 +17,6 @@ interface ApiService {
     suspend fun romperVarita(@Path("id") idVarita: Int): Response<Varita>
 
     @POST("api/varita/moviles")
-    suspend fun crearVarita(varita: CrearVarita): Response<Varita>
+    suspend fun crearVarita(@Body varita: CrearVarita): Response<Varita>
 
 }

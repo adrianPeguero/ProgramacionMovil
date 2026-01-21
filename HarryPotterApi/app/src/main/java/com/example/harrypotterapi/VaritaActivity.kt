@@ -3,9 +3,11 @@ package com.example.harrypotterapi
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.harrypotterapi.adapter.VaritaAdapter
@@ -36,6 +38,7 @@ class VaritaActivity : AppCompatActivity() {
         recogerVarita()
         if(varitaSeleccionada !=  null){
             rellenarCampos()
+            binding.cbRota.isEnabled = false
             binding.btnCrearVarita.visibility = View.INVISIBLE
         }
 
@@ -87,7 +90,7 @@ class VaritaActivity : AppCompatActivity() {
             }
             catch (e: Exception){
                 withContext(Dispatchers.Main){
-                    Toast.makeText(this@VaritaActivity, "Varita actualizada.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@VaritaActivity, "Error al romper.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -97,8 +100,8 @@ class VaritaActivity : AppCompatActivity() {
 
     fun onClickCrear(view:View){
         var campos = getCampos()
-        if(HayCamposNulos(campos)){
-            //mensaje
+        if(HayCamposNulos(campos).isNotEmpty()){
+            Toast.makeText(this@VaritaActivity, "Debes darle valor a todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
         val madera = binding.tvMadera.text.toString()
@@ -109,35 +112,47 @@ class VaritaActivity : AppCompatActivity() {
 
         var varita = CrearVarita(madera, nucelo, longitud, rota, mago)
         val servicio = getRetrofit()
-        lifecycleScope.launch(Dispatchers.IO){
-            try{
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                Log.d("API_TEST", "Iniciando llamada a la API...")
                 val respuesta = servicio.crearVarita(varita)
-                if(respuesta.isSuccessful){
-                    withContext(Dispatchers.Main){
-                        Toast.makeText(this@VaritaActivity, "Varita creada correctmente", Toast.LENGTH_SHORT).show()
-                        binding.tvMadera.setText("")
-                        binding.tvNucleo.setText("")
-                        binding.tvLongitud.setText("")
-                        binding.tvMago.setText("")
-                        if(binding.cbRota.isChecked) binding.cbRota.isChecked = false
+
+                withContext(Dispatchers.Main) {
+                    if (respuesta.isSuccessful) {
+                        Log.d("API_TEST", "¡Éxito! Limpiando campos...")
+                        limpiarInterfaz()
+                        Toast.makeText(this@VaritaActivity, "Varita creada!", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }catch (e : Exception){
-                withContext(Dispatchers.Main){
-                    Toast.makeText(this@VaritaActivity, "Varita actualizada.", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.e("API_TEST", "Excepción capturada: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@VaritaActivity, "Fallo total: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
 
+    private fun limpiarInterfaz() {
+        binding.apply {
+            tvMadera.text.clear()
+            tvNucleo.text.clear()
+            tvLongitud.text.clear()
+            tvMago.text.clear()
+            cbRota.isChecked = false
+        }
+    }
 
-    private fun HayCamposNulos(campos: List<String>): Boolean {
-        var nulo = false
+
+    private fun HayCamposNulos(campos: List<String>): List<String> {
+        var camposNulos = mutableListOf<String>()
         for(c in campos){
-            if(c.isEmpty()) nulo = true
+            if(c.isEmpty()){
+                camposNulos.add(c)
+            }
         }
 
-        return nulo
+        return camposNulos
     }
     private fun getCampos(): List<String> {
         return listOf(
